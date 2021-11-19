@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>New user</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
+</head>
+<body>
+    <div th:insert="~{common/menu :: menu}"></div>
+
+    <form class="pure-form pure-form-aligned" th:method="post" th:action="@{/admin/users}" th:object="${user}">
+        <div class="pure-control-group">
+            <label th:for="name">Name:</label>
+            <input type="text" th:field="*{name}" />
+        </div>
+        <div class="pure-control-group">
+            <label th:for="username">Username:</label>
+            <input type="text" th:field="*{username}" />
+        </div>
+        <div class="pure-control-group">
+            <label th:for="password">Password: </label>
+            <input type="password" th:field="*{password}" />
+        </div>
+        <div class="pure-control-group pure-u-1-4">
+            <label th:for="newRoles">Roles: </label>
+            <th:block th:each="role : ${allRoles}">
+                <input type="checkbox" th:field="*{roles}" th:value="${role.getName()}" th:text="${role.getLabel()}" />&nbsp;
+            </th:block>
+        </div>
+        <div class="pure-control-group">
+            <label th:for="enabled">Enabled: </label>
+            <input type="checkbox" th:field="*{enabled}" />
+        </div>
+        <div class="pure-control-group">
+            <input class="pure-button pure-button-primary pure-u-1-4" type="submit" value="Create!">
+        </div>
+    </form>
+</body>
+</html>
