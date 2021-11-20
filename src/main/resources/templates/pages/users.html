@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Users</title>
+
+    <!-- See configuration in WebMvConfig.java -->
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/popper/popper.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/script.js}"></script>
+
+</head>
+<body style="padding-top: 70px">
+
+<div th:insert="~{fragments/menu :: main-menu}"></div>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-2 vh-100">
+            <div th:insert="~{fragments/menu :: side-menu}"></div>
+        </div>
+
+        <div class="col-10 bg-light">
+            <h1>Admin panel</h1>
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-usertable" role="tab" aria-controls="nav-usertable" aria-selected="true">Users table</a>
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-newuser" role="tab" aria-controls="nav-newuser" aria-selected="false">New user</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-usertable" role="tabpanel" aria-labelledby="nav-usertable-tab" th:insert="~{fragments/userlist :: usertable}"></div>
+                <div class="tab-pane fade" id="nav-newuser" role="tabpanel" aria-labelledby="nav-newuser-tab" th:insert="~{fragments/newuser :: newuser-card}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

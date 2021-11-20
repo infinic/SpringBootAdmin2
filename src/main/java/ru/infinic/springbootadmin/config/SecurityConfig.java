@@ -57,11 +57,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Делаем страницу регистрации недоступной для авторизированных пользователей
                 .authorizeRequests()
                 .antMatchers( "/favicon.ico").permitAll()
+                .antMatchers( "/jquery/**").permitAll()
+                .antMatchers( "/popper/**").permitAll()
+                .antMatchers( "/bootstrap/**").permitAll()
                 // Страницы аутентификаци доступна всем
                 .antMatchers("/login").anonymous()
                 // Защищенные URL
+                //.antMatchers("/user").hasRole("USER ADMIN")
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user").hasRole("USER")
                 .anyRequest().authenticated();
     }
 

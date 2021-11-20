@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<div th:fragment="userinfo">
+    <div class="card">
+        <div class="card-header">
+            <h5>About user</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Roles</th>
+                    <th>Enabled</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${user.getId()}"></td>
+                    <td th:text="${user.getName()}"></td>
+                    <td th:text="${user.getUsername()}"></td>
+                    <td><th:block th:each="role : ${user.getRoles()}" th:text="${role.getLabel()}">&nbsp;</th:block></td>
+                    <td th:text="(${user.isEnabled()} ? 'Yes' : 'No')"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="usertable">
+    <div class="card">
+        <div class="card-header">
+            <h5>All users</h5>
+        </div>
+        <div class="card-body">
+            <table id="usertable" class="table table-striped" >
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Roles</th>
+                    <th>Enabled</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:href="@{/admin/users/{id}(id=${user.getId()})}" th:text="${user.getId()}"></td>
+                    <td th:text="${user.getName()}"></td>
+                    <td th:text="${user.getUsername()}"></td>
+                    <td><th:block th:each="role : ${user.getRoles()}">
+                        <span th:attr="data-role=${role.getName()}" th:text="${role.getLabel()}"></span>
+                    </th:block></td>
+                    <td th:text="(${user.isEnabled()} ? 'Yes' : 'No')"></td>
+                    <td>
+                        <button class="btn btn-info user-edit-button" data-toggle="modal" data-target="#userEditModal">Edit</button>
+                        <button class="btn btn-danger user-delete-button" data-toggle="modal" data-target="#userDeleteModal">Delete</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal User Edit-->
+    <div class="modal fade" id="userEditModal" tabindex="-1" role="dialog" aria-labelledby="userEditModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form th:method="post" th:action="@{/admin/users}" th:object="${user}">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userEditModalLabel">Edit user</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset class="mx-auto text-center" style="width: 300px">
+                            <div class="form-group">
+                                <label th:for="id">Id</label>
+                                <input class="form-control" type="text" th:field="*{id}" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label th:for="name">Name</label>
+                                <input class="form-control" type="text" th:field="*{name}" />
+                            </div>
+                            <div class="form-group">
+                                <label th:for="username">Username</label>
+                                <input class="form-control" type="text" th:field="*{username}" />
+                            </div>
+                            <div class="form-group">
+                                <label th:for="password">Password</label>
+                                <input class="form-control" type="password" th:field="*{password}" />
+                            </div>
+                            <div class="form-group">
+                                <label th:for="newRoles">Roles</label>
+                                <select class="form-control" th:field="*{roles}" th:size="${allRoles.size()}" multiple required>
+                                    <th:block th:each="role : ${allRoles}">
+                                        <option type="checkbox" th:value="${role.getName()}" th:text="${role.getLabel()}" />&nbsp;
+                                    </th:block>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" th:field="*{enabled}">
+                                    <label class="form-check-label" th:for="enabled">
+                                        Enabled
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal User Delete -->
+    <div class="modal fade" id="userDeleteModal" tabindex="-1" role="dialog" aria-labelledby="userDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form th:method="delete" th:action="@{/admin/users}" th:object="${user}">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userDeleteModalLabel">Delete user</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset class="mx-auto text-center" style="width: 300px">
+                            <div class="form-group">
+                                <label th:for="id">Id</label>
+                                <input class="form-control" type="text" th:field="*{id}" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label th:for="name">Name</label>
+                                <input class="form-control" type="text" th:field="*{name}" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label th:for="username">Username</label>
+                                <input class="form-control" type="text" th:field="*{username}" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label th:for="newRoles">Roles</label>
+                                <select class="form-control" th:field="*{roles}" th:size="${allRoles.size()}" multiple readonly>
+                                    <th:block th:each="role : ${allRoles}">
+                                        <option type="checkbox" th:value="${role.getName()}" th:text="${role.getLabel()}" />&nbsp;
+                                    </th:block>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" th:field="*{enabled}" readonly>
+                                    <label class="form-check-label" th:for="enabled">
+                                        Enabled
+                                    </label>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</html>

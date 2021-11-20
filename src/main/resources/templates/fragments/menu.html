@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<div th:fragment="main-menu">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="navbar-brand">
+            <span sec:authentication="name" class="font-weight-bold">NO USERNAME</span>
+            with roles:
+            <span sec:authentication="principal.authorities">NO ROLES</span>
+        </div>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div th:fragment="side-menu">
+    <nav class="nav flex-column nav-pills" aria-orientation="vertical">
+        <a class="flex-sm-fill nav-link" sec:authorize="hasRole('ADMIN')"
+           th:classappend="(${#httpServletRequest.requestURI} == '/admin' OR
+                            ${#httpServletRequest.requestURI} == '/admin/users' OR
+                            ${#httpServletRequest.requestURI} == '/admin/users/new') ? 'active' : ''" th:href="@{/admin}">Admin</a>
+        <a class="flex-sm-fill nav-link" th:classappend="${#httpServletRequest.requestURI} == '/user' ? 'active' : ''" th:href="@{/user}" >User</a>
+    </nav>
+</div>
